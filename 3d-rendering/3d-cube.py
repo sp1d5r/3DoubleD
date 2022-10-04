@@ -4,7 +4,9 @@ import requests
 import math
 
 app = Ursina()
-cube = Entity(model="cube", color=color.azure, texture="white-cube", scale=1)
+room = Entity(model="./models/room.obj", texture="brick", scale=0.7, x=0, y=-7)
+cube = Entity(model="cube", color=color.azure, texture="brick", scale=1)
+camera.z = -10
 camera_position_text = Text(text="Camera Pos = (x,y)", scale=1, x=0.1, y=0)
 face_position_text = Text(text="face Pos = (x,y)", scale=1, x=0.1, y=-0.1)
 cube_position_text = Text(text="Cube Position Pos = (x,y)", scale=1, x=0.1, y=-0.2)
