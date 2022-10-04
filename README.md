@@ -3,6 +3,10 @@ Essentially what i want to do is to identify a face and then find out
 how far away it is from the camera. A best case scenario would be i get 
 to see a vector (x, y, z) representing this distance.
 
+Here's a preview of what we get in the end, it's not the finished product so do actually read this:
+
+![beta demo for beta people](temp-demo.gif)
+
 ## Camera & Open CV
 First part of this problem was to get the camera working. inside `facial-deteciton.py`
 is my first exploration with getting opencv working on my machine. 
@@ -95,6 +99,7 @@ Sickkkk!!! It works now!
 
 Heres the demo!
 
+![the demo of gods](demo.gif)
 
 ## Poverty + 360 Camera
 ![Should i pay rent or what?](pay-rent.png)
