@@ -16,22 +16,25 @@ camera_rotation_text = Text(text="camera rotation = (x,y)", scale=1, x=0.1, y=-0
 def update_position_text():
     x_pos = requests.get("http://127.0.0.1:5000/get_x")
     y_pos = requests.get("http://127.0.0.1:5000/get_y")
+    dist = requests.get("http://127.0.0.1:5000/get_dist")
 
-    if (x_pos.status_code == 200 and y_pos.status_code == 200):
-        x_pos, y_pos = x_pos.text, y_pos.text
-        x_pos, y_pos = float(x_pos), float(y_pos)
+    if (x_pos.status_code == 200 and y_pos.status_code == 200 and dist.status_code == 200):
+        x_pos, y_pos, dist = x_pos.text, y_pos.text, dist.text
+        x_pos, y_pos, dist = float(x_pos), float(y_pos), float(dist)
 
         scaled_x = 3 * (x_pos - (640 / 2)) / 640
         scaled_y = 3 * (y_pos - (480 / 2)) / 480
-
-        face_position_text.text = f"Face position = ({scaled_x}, {scaled_y})"
-        move_camera_x_y(-scaled_x, -scaled_y)
+        scaled_z = -10 - (dist / 6)
 
 
-def move_camera_x_y(x, y):
+        face_position_text.text = f"Face position = ({scaled_x}, {scaled_y}, {scaled_z})"
+        move_camera_x_y_z(-scaled_x, -scaled_y, scaled_z)
+
+
+def move_camera_x_y_z(x, y, z):
     camera.x = x
     camera.y = y
-
+    camera.z = z
 
 def move_camera():
     camera.x += held_keys['d'] * 0.1

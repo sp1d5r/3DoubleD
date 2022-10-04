@@ -2,6 +2,7 @@
 Camera Initialisation
 Get the camera set up and show what the camera sees
 """
+import math
 
 import numpy as np
 import cv2
@@ -55,7 +56,7 @@ face_mesh = mp_face_mesh.FaceMesh(
 )
 
 # IRIS Frames
-LEFT_IRIS = [474,475, 476, 477]
+LEFT_IRIS = [474, 475, 476, 477]
 RIGHT_IRIS = [469, 470, 471, 472]
 
 
@@ -80,6 +81,8 @@ def get_face_atributes(frame):
 
         cv2.polylines(frame, [mesh_points[LEFT_IRIS]], True, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.polylines(frame, [mesh_points[RIGHT_IRIS]], True, (0, 255, 0), 1, cv2.LINE_AA)
+
+        print(calculate_distance(mesh_points[LEFT_IRIS]))
 
         left_iris_center = (int(sum([i[0] for i in mesh_points[LEFT_IRIS]]) / len(LEFT_IRIS)),
                             int(sum([i[1] for i in mesh_points[LEFT_IRIS]]) / len(LEFT_IRIS)))
@@ -106,7 +109,29 @@ def get_face_atributes(frame):
 
 x_position = 0
 y_position = 0
+distance_to_eye = 0
+IRIS_SIZE = 17  # mm
 
+def calculate_distance(left_iris):
+    global distance_to_eye
+    left_iris_leftmost_landmark, left_iris_rightmost_landmark = left_iris[0], left_iris[2]
+
+    focal_length = 50  # nm
+    sensor_size = 24  # nm
+    x_res = 1280  # x 720
+
+    focal_length_in_px = (focal_length / sensor_size) * x_res
+    iris_dist = math.sqrt((left_iris_rightmost_landmark[0] - left_iris_leftmost_landmark[0])**2 +
+                          (left_iris_rightmost_landmark[1] - left_iris_leftmost_landmark[1]) ** 2)
+
+    # distance = (focal_length / pixels) * 17mm
+    distance = (focal_length_in_px / iris_dist) * IRIS_SIZE  # gives distance in mm
+    distance = round(distance / 100, 4)
+    if (distance != distance_to_eye):
+        distance_to_eye = distance
+        r = requests.get(f"http://127.0.0.1:5000/set_dist?dist={distance}")
+
+    return distance
 
 def update_positions(left_iris_center, right_iris_center):
     global x_position, y_position

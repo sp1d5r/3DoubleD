@@ -5,7 +5,15 @@ app = Flask(__name__)
 
 x_position = "0"
 y_position = "0"
+distance = "0"
 
+
+@app.route("/set_dist")
+def set_dist():
+    global distance
+    dist = request.args.get('dist')
+    distance = dist
+    return dist
 
 @app.route("/set_x")
 def set_x_pos():
@@ -33,3 +41,8 @@ def get_x():
 def get_y():
     global y_position
     return y_position
+
+@app.route("/get_dist")
+def get_dist():
+    global distance
+    return distance
