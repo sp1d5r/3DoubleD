@@ -3,7 +3,7 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 import requests
 import math
 
-app = Ursina()
+app = Ursina(borderless=False)
 room = Entity(model="./models/room.obj", texture="brick", scale=0.7, x=0, y=-7)
 cube = Entity(model="cube", color=color.azure, texture="brick", scale=1)
 camera.z = -10
